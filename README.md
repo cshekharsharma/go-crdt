@@ -110,4 +110,4 @@ We welcome contributions! To contribute:
 Please ensure your code follows the existing style, includes unit tests, and has updated GoDoc comments.
 
 ## License
-Distributed under the MIT License. See (LICENSE)[./LICENSE] for more information.
+Distributed under the MIT License. See [LICENSE](./LICENSE) for more information.
