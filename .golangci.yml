@@ -1,0 +1,47 @@
+version: 2
+
+run:
+  timeout: 5m
+  tests: true
+  concurrency: 4
+
+linters:
+  enable-all: true   # Turn on all available linters
+  disable:
+    - dupl            # May be noisy — turn back on if you want to force DRY
+    - funlen          # Turn on if you want max function length constraints
+    - godot           # Optional: enforces period at end of doc comments
+    - lll             # Line length limit (often noisy with long URLs/imports)
+
+linters-settings:
+  gocyclo:
+    min-complexity: 10
+
+  revive:
+    severity: warning
+    confidence: 0.8
+
+  depguard:
+    list-type: blacklist
+    packages:
+      - fmt
+      - log
+    packages-with-error-message:
+      fmt: "Use your structured logger instead of fmt"
+      log: "Use your custom logger instead of log"
+
+  errcheck:
+    check-type-assertions: true
+    check-blank: true
+
+  unused:
+    check-exported: true
+
+issues:
+  exclude-use-default: false
+  max-issues-per-linter: 0
+  max-same-issues: 0
+
+output:
+  format: colored-line-number
+  sort-results: true

@@ -1,0 +1,35 @@
+# Changelog
+
+All notable changes to this project will be documented in this file.
+
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## [1.0.0] - 2025-12-28
+
+### Added
+- **Core CRDT Interface**: Defined a unified `CRDT` interface with `Value() any` and `Merge(CRDT) error` to support polymorphic synchronization managers.
+- **G-Counter (Grow-only Counter)**:
+    - Distributed increment-only counter using state-based vector clocks.
+    - Idempotent merge logic using `Max()` per node slot.
+- **PN-Counter (Positive-Negative Counter)**:
+    - Support for both increments and decrements via G-Counter composition.
+    - Mathematical guarantee of convergence even with negative deltas.
+- **RGA (Replicated Growable Array)**:
+    - High-performance sequence CRDT for collaborative text editing.
+    - Hybrid **Linked-List + Hash Map** registry for $O(1)$ node lookup.
+    - **Causal Consistency Engine**: Implemented a `pendingOrphans` buffer to handle out-of-order network packets.
+    - **Deterministic Conflict Resolution**: Logic to handle concurrent inserts using Lamport Timestamps and NodeID tie-breakers.
+    - **Tombstone Support**: Logical deletion mechanism to preserve causal chains during concurrent edits.
+- **Thread Safety**: Integrated `sync.RWMutex` across all data structures to ensure memory safety in concurrent Go environments.
+- **Documentation**: Comprehensive **GoDoc** comments for all exported types and methods.
+- **Test Suite**: 
+    - Unit tests for all counter types.
+    - Convergence tests for RGA simulating concurrent multi-user editing.
+    - Causal ordering tests for late-arriving parent nodes.
+
+### Fixed
+- Resolved a race condition in RGA where concurrent sibling inserts could lead to document divergence.
+- Fixed an issue where "orphan" child nodes were dropped if they arrived before their parents.
+
+### Security
+- Implemented type-assertion checks in `Merge()` methods to prevent runtime panics when merging mismatched CRDT types.
